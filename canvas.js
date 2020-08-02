@@ -2,12 +2,21 @@ var canvas;
 var canvasContext;
 var ballX = 80;
 var ballY = 80;
-var ballSpeedX = 20;
+var ballSpeedX = 17;
 var ballSpeedY = 3;
 
 var paddle1Y = 250;
-const PADDLE_HEIGHT = 100;
+var paddle2Y = 250;
+
+const WIN = 50;
+
+var wonScreen = false;
+
+const PADDLE_HEIGHT = 120;
 const PADDLE_WIDTH = 10;
+
+var player1 = 0;
+var player2 = 0;
 
 function calcMousePos(event) {
   var rect = canvas.getBoundingClientRect();
@@ -25,6 +34,29 @@ function calcMousePos(event) {
   };
 }
 
+function handleMouseClick(event) {
+  if (wonScreen) {
+    player1 = 0;
+    player2 = 0;
+    wonScreen = false;
+  }
+}
+
+function handleKeyPress(event) {
+  var key = event.keyCode;
+  // console.log("X");
+  if (key == 38 || key == 87) {
+    if (paddle1Y - 10 > 0) {
+      paddle1Y -= 100;
+    }
+  } else if (key == 40 || key == 83) {
+    if (paddle1Y + 120 < canvas.height) {
+      paddle1Y += 100;
+      console.log("going down");
+    }
+  }
+}
+
 window.onload = function () {
   console.log("Game working!");
   canvas = document.getElementById("gameCanvas");
@@ -40,6 +72,10 @@ window.onload = function () {
 
   // drawEverything();
 
+  document.addEventListener("keydown", handleKeyPress);
+
+  canvas.addEventListener("mousedown", handleMouseClick);
+
   canvas.addEventListener("mousemove", function (event) {
     var mousePos = calcMousePos(event);
     // console.log(mousePos.x, mousePos.y);
@@ -53,15 +89,72 @@ window.onload = function () {
   });
 };
 
+function scoreDetails() {
+  document.getElementById("p1Score").innerHTML = player1;
+  document.getElementById("p2Score").innerHTML = player2;
+}
+
+function ballReset() {
+  if (player1 >= WIN || player2 >= WIN) {
+    // player2 = 0;
+    // player1 = 0;
+    wonScreen = true;
+  }
+
+  ballSpeedX = -ballSpeedX;
+
+  ballX = canvas.width / 2;
+  ballY = canvas.height / 2;
+}
+
+function computerMovement() {
+  var paddle2YCentre = paddle2Y + PADDLE_HEIGHT / 2;
+  if (paddle2YCentre < ballY - 35) {
+    paddle2Y += 15;
+  } else if (paddle2YCentre > ballY + 35) {
+    paddle2Y -= 15;
+  }
+}
+
 function moveEverything() {
+  if (wonScreen) {
+    return;
+  }
+
+  computerMovement();
+
   ballX = ballX + ballSpeedX;
   ballY = ballY + ballSpeedY;
 
   if (ballX < 0) {
-    ballSpeedX = -ballSpeedX;
+    if (ballY > paddle1Y && ballY < paddle1Y + PADDLE_HEIGHT) {
+      ballSpeedX = -ballSpeedX;
+      var deltaY = ballY - (paddle1Y + PADDLE_HEIGHT / 2);
+      ballSpeedY = deltaY * 0.35;
+    } else {
+      player2++;
+      ballReset();
+      // setInterval(function () {
+      //   canvasContext.font = "40px Virginia";
+      //   canvasContext.fillStyle = "orange";
+      //   canvasContext.fillText("Ouch", canvas.width / 3 - 200, 300);
+      // }, 10);
+    }
   }
   if (ballX > canvas.width) {
-    ballSpeedX = -ballSpeedX;
+    if (ballY > paddle2Y && ballY < paddle2Y + PADDLE_HEIGHT) {
+      ballSpeedX = -ballSpeedX;
+      var deltaY = ballY - (paddle2Y + PADDLE_HEIGHT / 2);
+      ballSpeedY = deltaY * 0.4;
+    } else {
+      player1++;
+      ballReset();
+      // setInterval(function () {
+      //   canvasContext.font = "40px Virginia";
+      //   canvasContext.fillStyle = "orange";
+      //   canvasContext.fillText("Ouch", canvas.width / 3 + 400, 300);
+      // }, 10);
+    }
   }
   if (ballY < 0) {
     ballSpeedY = -ballSpeedY;
@@ -71,10 +164,60 @@ function moveEverything() {
   }
 }
 
+function drawNet() {
+  for (var i = 0; i < canvas.height; i += 40) {
+    colorRect(canvas.width / 2 - 1, i, 2, 20, "white");
+  }
+}
+
 function drawEverything() {
   colorRect(0, 0, canvas.width, canvas.height, "black");
+
+  scoreDetails();
+
+  if (wonScreen) {
+    canvasContext.font = "70px Virginia";
+    canvasContext.fillStyle = "yellow";
+    canvasContext.fillText("Game Over!", canvas.width / 3, 300);
+
+    canvasContext.font = "60px Verdana";
+    var gradient = canvasContext.createLinearGradient(0, 0, canvas.width, 0);
+    gradient.addColorStop("0", "magenta");
+    gradient.addColorStop("0.5", "blue");
+    gradient.addColorStop("1.0", "red");
+    // Fill with gradient
+    canvasContext.fillStyle = gradient;
+    if (player1 >= WIN) {
+      canvasContext.fillText(
+        "Player 1 (aka Left Player) won!",
+        canvas.width / 3,
+        400
+      );
+    } else if (player2 >= WIN) {
+      canvasContext.fillText(
+        "Player 2 (aka Right Player) won!",
+        canvas.width / 3,
+        400
+      );
+    }
+
+    return;
+  }
+
   // console.log("called drawEverything" + ballX);
+
+  drawNet();
+
   colorRect(5, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT, "white");
+
+  colorRect(
+    canvas.width - 5 - PADDLE_WIDTH,
+    paddle2Y,
+    PADDLE_WIDTH,
+    PADDLE_HEIGHT,
+    "white"
+  );
+
   colorCircle(ballX, ballY, 10, "red");
 }
 
