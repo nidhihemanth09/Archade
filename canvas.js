@@ -1,7 +1,9 @@
 var canvas;
 var canvasContext;
 var ballX = 80;
+var ballY = 80;
 var ballSpeedX = 20;
+var ballSpeedY = 3;
 
 window.onload = function () {
   console.log("Game working!");
@@ -21,11 +23,19 @@ window.onload = function () {
 
 function moveEverything() {
   ballX = ballX + ballSpeedX;
+  ballY = ballY + ballSpeedY;
+
   if (ballX < 0) {
     ballSpeedX = -ballSpeedX;
   }
   if (ballX > canvas.width) {
     ballSpeedX = -ballSpeedX;
+  }
+  if (ballY < 0) {
+    ballSpeedY = -ballSpeedY;
+  }
+  if (ballY > canvas.height) {
+    ballSpeedY = -ballSpeedY;
   }
 }
 
@@ -33,7 +43,7 @@ function drawEverything() {
   colorRect(0, 0, canvas.width, canvas.height, "black");
   // console.log("called drawEverything" + ballX);
   colorRect(5, 210, 10, 100, "white");
-  colorCircle(ballX, 100, 10, "red");
+  colorCircle(ballX, ballY, 10, "red");
 }
 
 function colorCircle(centreX, centreY, radius, drawColor) {
