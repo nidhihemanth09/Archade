@@ -1,7 +1,7 @@
 var canvas;
 var canvasContext;
-var ballX = 50;
-var ballSpeedX = 10;
+var ballX = 80;
+var ballSpeedX = 20;
 
 window.onload = function () {
   console.log("Game working!");
@@ -10,7 +10,7 @@ window.onload = function () {
   canvas.height = window.innerHeight;
   canvasContext = canvas.getContext("2d");
 
-  var framesPerSecond = 30;
+  var framesPerSecond = 50;
   setInterval(function () {
     moveEverything();
     drawEverything();
@@ -30,11 +30,20 @@ function moveEverything() {
 }
 
 function drawEverything() {
-  canvasContext.fillStyle = "black";
-  canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+  colorRect(0, 0, canvas.width, canvas.height, "black");
   // console.log("called drawEverything" + ballX);
-  canvasContext.fillStyle = "white";
-  canvasContext.fillRect(5, 210, 10, 100);
-  canvasContext.fillStyle = "red";
-  canvasContext.fillRect(ballX, 200, 10, 10);
+  colorRect(5, 210, 10, 100, "white");
+  colorCircle(ballX, 100, 10, "red");
+}
+
+function colorCircle(centreX, centreY, radius, drawColor) {
+  canvasContext.fillStyle = drawColor;
+  canvasContext.beginPath();
+  canvasContext.arc(centreX, centreY, radius, 0, Math.PI * 2, true);
+  canvasContext.fill();
+}
+
+function colorRect(leftX, topY, width, height, drawColor) {
+  canvasContext.fillStyle = drawColor;
+  canvasContext.fillRect(leftX, topY, width, height);
 }
