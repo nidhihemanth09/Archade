@@ -2,7 +2,7 @@ var canvas;
 var canvasContext;
 var ballX = 80;
 var ballY = 80;
-var ballSpeedX = 17;
+var ballSpeedX = 14;
 var ballSpeedY = 3;
 
 var paddle1Y = 250;
@@ -102,9 +102,22 @@ function ballReset() {
   }
 
   ballSpeedX = -ballSpeedX;
+  // ballSpeedY = 3;
 
   ballX = canvas.width / 2;
   ballY = canvas.height / 2;
+
+  // if (ballX == 0) {
+  //   // console.log("FUCKER");
+  //   ballX = canvas.width;
+  //   ballY = canvas.height - ballY;
+  // } else if (ballY > canvas.height - 15 && ballX > canvas.width - 10) {
+  //   ballX = 0;
+  //   ballY = canvas.height / 3;
+  // } else {
+  //   ballX = canvas.width;
+  //   ballY = canvas.height - ballY;
+  // }
 }
 
 function computerMovement() {
@@ -148,6 +161,10 @@ function moveEverything() {
       ballSpeedY = deltaY * 0.4;
     } else {
       player1++;
+      // player2--;
+      // if (player2 < 0) {
+      //   player2 = -player2;
+      // }
       ballReset();
       // setInterval(function () {
       //   canvasContext.font = "40px Virginia";

@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital@1&family=Satisfy&display=swap");
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #eee;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+canvas {
+  background-color: #b2e0a4;
+}
+
+#gameCanvas {
+  border: 1px solid rgb(61, 13, 13);
+  background-color: black;
+  width: 70%;
+  height: 90%;
+  margin: 5%;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th,
+td {
+  background-color: #faebd7;
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid rgb(14, 11, 11);
+}
+
+#title {
+  position: absolute;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 300;
+  font-size: 5.6rem;
+  top: 2%;
+  left: 35%;
+}
+
+#scores {
+  top: 2%;
+  right: 20%;
+  font-family: "Lato", sans-serif;
+  position: absolute;
+}
+
+#overlay {
+  top: 11%;
+  position: absolute;
+}
