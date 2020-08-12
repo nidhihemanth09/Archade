@@ -8,7 +8,7 @@ var ballSpeedY = 3;
 var paddle1Y = 250;
 var paddle2Y = 250;
 
-const WIN = 50;
+const WIN = 1;
 
 var wonScreen = false;
 
@@ -193,11 +193,15 @@ function drawEverything() {
   scoreDetails();
 
   if (wonScreen) {
-    canvasContext.font = "70px Virginia";
+    canvasContext.font = "5rem Virginia";
     canvasContext.fillStyle = "yellow";
-    canvasContext.fillText("Game Over!", canvas.width / 3, 300);
+    canvasContext.fillText("Game Over!", canvas.width / 3, 240);
 
-    canvasContext.font = "60px Verdana";
+    canvasContext.font = '3.5rem "Lato", sans-serif';
+    canvasContext.fillStyle = "white";
+    canvasContext.fillText("Tap to continue", canvas.width / 3, 320);
+
+    canvasContext.font = "4rem Verdana";
     var gradient = canvasContext.createLinearGradient(0, 0, canvas.width, 0);
     gradient.addColorStop("0", "magenta");
     gradient.addColorStop("0.5", "blue");
@@ -206,15 +210,15 @@ function drawEverything() {
     canvasContext.fillStyle = gradient;
     if (player1 >= WIN) {
       canvasContext.fillText(
-        "Player 1 (aka Left Player) won!",
-        canvas.width / 3,
-        400
+        "Player 1 (Left Player) won!",
+        canvas.width / 5,
+        420
       );
     } else if (player2 >= WIN) {
       canvasContext.fillText(
-        "Player 2 (aka Right Player) won!",
-        canvas.width / 3,
-        400
+        "Player 2 (Right Player) won!",
+        canvas.width / 5,
+        420
       );
     }
 
